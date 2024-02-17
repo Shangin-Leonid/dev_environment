@@ -16,9 +16,25 @@ set colorcolumn=120
 
 call plug#begin()
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'jackguo380/vim-lsp-cxx-highlight'
-    Plug 'joshdick/onedark.vim'
+    "Plug 'jackguo380/vim-lsp-cxx-highlight'
+    Plug 'octol/vim-cpp-enhanced-highlight'
+"   Plug 'joshdick/onedark.vim'
+"   Plug 'bfrg/vim-cpp-modern'
+    Plug 'sonph/onehalf', { 'rtp': 'vim' }
 call plug#end()
+
+"---------------------
+" --- Clang-fromat ---
+"---------------------
+
+function FormatBuffer()
+    if &modified && !empty(findfile('.clang-format', expand('%:p:h') . ';'))
+        let cursor_pos = getpos('.')
+        :%!clang-format
+        call setpos('.', cursor_pos)
+    endif
+endfunction
+autocmd BufWritePre *.h,*.hpp,*.c,*.cpp :call FormatBuffer()
 
 "---------------
 "--- Coc Vim ---
@@ -424,5 +440,9 @@ endif
 set background=dark
 
 " Цветовая схема
-colorscheme onedark
+set cursorline
+colorscheme onehalfdark
+let g:airline_theme='onehalflight'
+" lightline
+" let g:lightline = { 'colorscheme': 'onehalfdark' }
 
